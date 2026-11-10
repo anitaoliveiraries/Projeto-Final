@@ -2,8 +2,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-ARQUIVO = "Customer Churn.csv"
-
 COLUNAS = [
     "Call Failure", "Complains", "Subscription Length",
     "Charge Amount", "Seconds of Use", "Frequency of use",
@@ -12,32 +10,27 @@ COLUNAS = [
     "Customer Value", "Churn"
 ]
 
-
 # CARREGA E VALIDAR O ARQUIVO
-def carregar_dados():
+def carregar_dados(arquivo):
     try:
-        dados = pd.read_csv(ARQUIVO, sep=None, engine="python")
+        dados = pd.read_csv(arquivo)
 
         # Padroniza os espaços dos nomes das colunas
         dados.columns = [" ".join(c.split()) for c in dados.columns]
 
         if dados.empty:
-            print("Erro: arquivo vazio.")
-            return None
+            raise ValueError("Arquivo vazio.")
 
         if not set(COLUNAS).issubset(dados.columns):
-            print("Erro: existem colunas obrigatórias ausentes.")
-            return None
+            raise ValueError("Colunas obrigatórias ausentes.")
 
         print("Arquivo carregado com sucesso!")
         return dados
 
     except FileNotFoundError:
-        print("Erro: arquivo não encontrado.")
+        raise FileNotFoundError("Erro: arquivo não encontrado.")
     except Exception as erro:
-        print("Erro ao abrir o arquivo:", erro)
-
-    return None
+        raise ValueError("Erro ao abrir o arquivo:", erro)
 
 
 # VERIFICA E TRATA OS DADOS
@@ -120,27 +113,3 @@ def analisar_dados(dados):
              "Frequency of SMS", "Customer Value"]
         ].mean().round(2)
     )
-
-# EXECUÇÃO
-def main():
-    dados = carregar_dados()
-
-    if dados is None:
-        return
-
-    dados = tratar_dados(dados)
-
-    if dados.empty:
-        print("Não existem dados válidos para analisar.")
-        return
-
-    analisar_dados(dados)
-    gerar_graficos(dados)
-
-    dados.to_csv("Customer Churn tratado.csv", index=False)
-
-    print("\nAnálise finalizada!")
-    print("Arquivo tratado salvo com sucesso.")
-
-
-main()
