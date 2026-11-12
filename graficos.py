@@ -1,34 +1,42 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
+
+# Garante que a pasta static/graficos existe
+os.makedirs("static/graficos", exist_ok=True)
 
 # Carrega os dados tratados
-dados = pd.read_csv("Customer Churn tratado.csv")
+dados = pd.read_csv("data/Customer Churn tratado.csv")
 
-# Gráfico 1: clientes que cancelaram ou permaneceram
-dados["Churn"].value_counts().sort_index().plot(kind="bar")
+# Grafico de distribuição(histograma)
+plt.figure()
+dados["Subscription Length"].plot(kind="hist", bins=20, edgecolor="black")
+plt.title("Distribuição do Tempo de Contrato")
+plt.xlabel("Meses de Contrato")
 
-plt.title("Clientes que cancelaram e permaneceram")
-plt.xlabel("Churn (0 = permaneceu, 1 = cancelou)")
-plt.ylabel("Quantidade")
-plt.savefig("graficos/cancelamentos.png")
-plt.show()
+plt.ylabel("Quantidade de Clientes")
+plt.savefig("static/graficos/distribuicao.png")
 
+plt.close()
 
-# Gráfico 2: cancelamento por reclamação
+# Gráfico de comparação(barras)
+plt.figure()
 (dados.groupby("Complains")["Churn"].mean() * 100).plot(kind="bar")
-
-plt.title("Cancelamento por reclamação")
-plt.xlabel("Reclamação")
+plt.title("Comparação: Cancelamento por Reclamação")
+plt.xlabel("Fez Reclamação? (0 = Não, 1 = Sim)")
 plt.ylabel("Cancelamento (%)")
-plt.savefig("graficos/reclamacoes.png")
-plt.show()
+plt.xticks(rotation=0)
+plt.savefig("static/graficos/comparacao.png")
 
+plt.close()
 
-# Gráfico 3: cancelamento por plano
-(dados.groupby("Tariff Plan")["Churn"].mean() * 100).plot(kind="bar")
+# Gráfico de relação
+plt.figure()
+plt.scatter(dados["Seconds of Use"], dados["Customer Value"], alpha=0.5)
+plt.title("Relação: Tempo de Uso vs Valor do Cliente")
+plt.xlabel("Segundos de Uso")
+plt.ylabel("Valor do Cliente")
+plt.savefig("static/graficos/relacao.png")
+plt.close()
 
-plt.title("Cancelamento por plano tarifário")
-plt.xlabel("Plano")
-plt.ylabel("Cancelamento (%)")
-plt.savefig("graficos/planos.png")
-plt.show()
+print("Os 3 gráficos foram gerados com sucesso")

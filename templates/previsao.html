@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Previsão de Cancelamento</title>
+</head>
+<body>
+    <h1>Simulador de Churn (Cancelamento)</h1>
+    <hr>
+    <p>Preencha os dados do cliente abaixo. O modelo de Inteligência vai calcular o risco de cancelamento.</p>
+
+    <!-- resultado da previsão -->
+    {% if mensagem %}
+        {% if 'ALERTA' in mensagem %}
+            <h2 style="color: red;">{{ mensagem }}</h2>
+        {% else %}
+            <h2 style="color: blue;">{{ mensagem }}</h2>
+        {% endif %}
+        <hr>
+    {% endif %}
+    
+    {% if erro %}
+        <h2 style="color: red;">{{ erro }}</h2>
+        <hr>
+    {% endif %}
+
+    <form action="/prever" method="POST">
+        
+        <!-- dados de uso -->
+        <fieldset>
+            <legend><b>1. Dados de Uso e Cobrança</b></legend>
+            
+            <p>
+                <label>Falhas de chamada:</label><br>
+                <input type="number" name="Call Failure" min="0" required>
+            </p>
+
+            <p>
+                <label>Segundos de uso:</label><br>
+                <input type="number" name="Seconds of Use" min="0" required>
+            </p>
+
+            <p>
+                <label>Frequência de uso:</label><br>
+                <input type="number" name="Frequency of use" min="0" required>
+            </p>
+            <p>
+                <label>Frequência de SMS:</label><br>
+                <input type="number" name="Frequency of SMS" min="0" required>
+            </p>
+            <p>
+                <label>Números distintos contatados:</label><br>
+                <input type="number" name="Distinct Called Numbers" min="0" required>
+            </p>
+            <p>
+                <label>Valor cobrado:</label><br>
+                <input type="number" name="Charge Amount" min="0" required>
+            </p>
+            <p>
+                <label>Valor do cliente:</label><br>
+                <input type="number" step="0.01" name="Customer Value" min="0" required>
+            </p>
+        </fieldset>
+        
+        <br>
+
+        <!-- dados do contrato e cliente -->
+        <fieldset>
+            <legend><b>2. Dados do Contrato e Perfil</b></legend>
+
+            <p>
+                <label>Fez alguma reclamação?:</label><br>
+                <select name="Complains" required>
+                    <option value="0">0 = Não</option>
+                    <option value="1">1 = Sim</option>
+                </select>
+            </p>
+
+            <p>
+                <label>Meses de contrato:</label><br>
+                <input type="number" name="Subscription Length" min="0" required>
+            </p>
+            <p>
+                <label>Idade exata:</label><br>
+                <input type="number" name="Age" min="18" max="100" required>
+            </p>
+            <p>
+                <label>Grupo de idade 1 a 5:</label><br>
+                <input type="number" name="Age Group" min="1" max="5" required>
+            </p>
+            <p>
+                <label>Plano Tarifário:</label><br>
+                <select name="Tariff Plan" required>
+                    <option value="1">1 = Plano 1</option>
+                    <option value="2">2 = Plano 2</option>
+                </select>
+            </p>
+            <p>
+                <label>Situação da linha:</label><br>
+                <select name="Status" required>
+                    <option value="1">1 = Ativa</option>
+                    <option value="2">2 = Inativa / Suspensa</option>
+                </select>
+            </p>
+        </fieldset>
+
+        <br>
+        <button type="submit" style="padding: 10px 20px; font-size: 16px;"><b>Calcular Risco de Cancelamento</b></button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <a class="voltar" href="/">&larr; Nova Pesquisa</a>
+    
+    <meta charset="UTF-8">
+    <title>Resultados da Análise</title>
+</head>
+<body>
+    <h1>Análise dos Dados Recebidos</h1>
+    <p>O seu arquivo csv foi processado.</p>
+
+    <!-- Mostra os 3 gráficos gerados -->
+    <h2>1. Distribuição do Tempo de Contrato</h2>
+    <img src="{{ url_for('static', filename='graficos/distribuicao.png') }}" width="600">
+
+    <h2>2. Comparação: Cancelamento por Reclamação</h2>
+    <img src="{{ url_for('static', filename='graficos/comparacao.png') }}" width="600">
+
+    <h2>3. Relação: Tempo de Uso vs Valor do Cliente</h2>
+    <img src="{{ url_for('static', filename='graficos/relacao.png') }}" width="600">
+
+</body>
+</html>
