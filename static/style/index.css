@@ -350,3 +350,65 @@ h2, h3 { font-family: "Manrope", sans-serif; }
     .intro-copy { font-size: 14px; }
     .dropzone { min-height: 245px; padding: 22px 14px; }
 }
+
+/* Cartão branco igual ao bloco de upload */
+.card-previsao {
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    border: 1px solid #eef2f6;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Cabeçalho interno com ícone e texto */
+.card-previsao-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+
+
+.card-previsao-titulo {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 2px 0;
+}
+
+.card-previsao-subtitulo {
+    font-size: 0.875rem;
+    color: #64748b;
+    margin: 0;
+}
+
+/* Rodapé do cartão alinhando o botão à direita */
+.card-previsao-footer {
+    display: flex;
+    justify-content: left;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 16px;
+}
+
+/* Botão estilizado no mesmo tom azul-petróleo do site */
+.btn-prever-site {
+    display: left;
+    align-items: left;
+    gap: 8px;
+    background-color: #1e6091;
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 10px 21px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-prever-site:hover {
+    background-color: #164970;
+    color: #ffffff;
+}
