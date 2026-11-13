@@ -116,7 +116,10 @@ A base representa clientes de uma empresa de telecomunicações do Irã e não n
 
 ## Integrantes e participação
 
-Integrantes registrados no projeto: Gabriel Vitor Batista, Anita, Leandro e Sérgio. Completem os nomes conforme a lista oficial do grupo. As responsabilidades individuais devem ser preenchidas pelo grupo de acordo com o que cada pessoa realmente desenvolveu e consegue explicar na apresentação.
+- Gabriel Vitor Batista: Responsável pela parte de Machine Learning (modelo.py), treinando e comparando os modelos (Random Forest e Regressão Logística) com base no F1-Score.
+- Anita de Oliveira Ries:Responsável pelo tratamento de dados (dados.py), realizando a limpeza, remoção de duplicatas, filtragem de valores inválidos e extração das estatísticas com o Pandas.
+- Leandro Luiz de Mattos: Responsável pelo backend e rotas em Flask (app.py), integrando o modelo de Machine Learning à aplicação e implementando as validações do formulário de previsão.
+- Sergio Rodrigo de Souza Filho: Responsável pelo front-end, pelas visualizações gráficas com Matplotlib (criar_graficos) e pelo script de teste no terminal (treinar.py), integrando os resultados às páginas web.
 
 ## Fontes e ferramentas
 
