@@ -20,7 +20,7 @@ function showFile(file) {
         fileInput.value = "";
         fileDetails.classList.add("d-none");
         confirmButton.disabled = true;
-        errorMessage.textContent = "Please choose a file in CSV format.";
+        errorMessage.textContent = "Selecione um arquivo no formato CSV.";
         errorMessage.classList.remove("d-none");
         return;
     }

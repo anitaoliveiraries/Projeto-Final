@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#f6f7fb">
+    <title>Resultados | Análise de Churn</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/index.css') }}">
+</head>
+<body>
+<div class="app-shell min-vh-100">
+    <header class="topbar"><nav class="container-fluid d-flex align-items-center h-100 px-3 px-md-5"><a class="brand d-inline-flex align-items-center gap-2 text-decoration-none" href="{{ url_for('index') }}"><span class="brand-mark"><i class="bi bi-graph-up-arrow"></i></span>Universidade Positivo</a></nav></header>
+    <main class="container py-5">
+        <section class="intro mb-4"><p class="eyebrow">Análise concluída</p><h1>Resultados</h1>{% if nome_arquivo %}<p class="intro-copy">Base analisada: <strong>{{ nome_arquivo }}</strong>.</p>{% endif %}</section>
+        {% if erro %}<div class="alert alert-danger" role="alert"><i class="bi bi-exclamation-triangle me-2"></i>{{ erro }}</div>
+        {% else %}
+        <section class="row g-3 mb-4" aria-label="Resumo do tratamento">
+            {% for rotulo, valor in [("Registros recebidos", tratamento.base_original.registros), ("Registros após limpeza", tratamento.base_final.registros), ("Registros removidos", tratamento.registros_removidos), ("Duplicatas encontradas", tratamento.duplicatas)] %}
+            <div class="col-12 col-sm-6 col-lg-3"><article class="result-card h-100"><span class="result-label">{{ rotulo }}</span><strong class="result-value">{{ valor }}</strong></article></div>
+            {% endfor %}
+        </section>
+        <section class="result-section mb-4">
+            <div class="section-heading"><span class="heading-icon"><i class="bi bi-clipboard-data"></i></span><div><h2>Qualidade e tratamento dos dados</h2><p>{{ tratamento.registros_invalidos }} registros inválidos e {{ tratamento.duplicatas }} duplicatas exatas identificadas. Linhas com ausências, valores fora dos domínios aceitos ou duplicatas foram removidas; o CSV original não é alterado.</p></div></div>
+            <div class="table-responsive"><table class="table table-hover result-table mb-0"><thead><tr>{% for coluna in tratamento.qualidade.colunas %}<th>{{ coluna }}</th>{% endfor %}</tr></thead><tbody>{% for linha in tratamento.qualidade.linhas %}<tr>{% for coluna in tratamento.qualidade.colunas %}<td>{{ linha[coluna] }}</td>{% endfor %}</tr>{% endfor %}</tbody></table></div>
+        </section>
+        <section class="result-section mb-4">
+            <div class="section-heading"><span class="heading-icon"><i class="bi bi-table"></i></span><div><h2>Amostra e estatísticas</h2><p>Prévia das cinco primeiras linhas recebidas e resumo estatístico dos dados mantidos.</p></div></div>
+            <div class="table-responsive mb-4"><table class="table table-hover result-table mb-0"><thead><tr>{% for coluna in tratamento.amostra.colunas %}<th>{{ coluna }}</th>{% endfor %}</tr></thead><tbody>{% for linha in tratamento.amostra.linhas %}<tr>{% for coluna in tratamento.amostra.colunas %}<td>{{ linha[coluna] }}</td>{% endfor %}</tr>{% endfor %}</tbody></table></div>
+            <div class="table-responsive"><table class="table table-hover result-table mb-0"><thead><tr>{% for coluna in analise.estatisticas.colunas %}<th>{{ coluna }}</th>{% endfor %}</tr></thead><tbody>{% for linha in analise.estatisticas.linhas %}<tr>{% for coluna in analise.estatisticas.colunas %}<td>{{ linha[coluna] }}</td>{% endfor %}</tr>{% endfor %}</tbody></table></div>
+        </section>
+        <section class="result-section mb-4"><div class="section-heading"><span class="heading-icon"><i class="bi bi-bar-chart-line"></i></span><div><h2>Visualizações</h2><p>Os três gráficos são recalculados a partir do CSV enviado.</p></div></div>
+            <div class="row g-3">{% for imagem in graficos %}<div class="col-12 col-lg-4"><img class="img-fluid rounded" src="data:image/png;base64,{{ imagem }}" alt="Gráfico {{ loop.index }} da análise de churn"></div>{% endfor %}</div>
+            <h3 class="h6 mt-4">Principais achados</h3><ul class="mb-0">{% for achado in analise.interpretacoes %}<li class="mb-1">{{ achado }}</li>{% endfor %}</ul>
+        </section>
+        <section class="result-section mb-4"><div class="section-heading"><span class="heading-icon"><i class="bi bi-cpu"></i></span><div><h2>Comparação dos modelos</h2><p>Os modelos usam a mesma divisão estratificada: {{ (avaliacao.proporcao_teste * 100)|int }}% para teste, random_state={{ avaliacao.random_state }}; {{ avaliacao.tamanho_treino }} registros para treino e {{ avaliacao.tamanho_teste }} para teste.</p></div></div>
+            <div class="table-responsive"><table class="table table-hover result-table"><thead><tr><th>Modelo</th><th>Acurácia</th><th>Precisão</th><th>Recall</th><th>F1</th></tr></thead><tbody>{% for nome, resultado in avaliacao.resultados.items() %}<tr><th>{{ nome }}{% if nome == avaliacao.escolhido %} — escolhido{% endif %}</th><td>{{ "%.3f"|format(resultado.acuracia) }}</td><td>{{ "%.3f"|format(resultado.precisao) }}</td><td>{{ "%.3f"|format(resultado.recall) }}</td><td>{{ "%.3f"|format(resultado.f1) }}</td></tr>{% endfor %}</tbody></table></div>
+            <p>O modelo final é <strong>{{ avaliacao.escolhido }}</strong>, escolhido pelo maior F1 no conjunto de teste. F1 equilibra precisão e recall para a classe de cancelamento. Acurácia sozinha pode esconder erros quando há menos clientes que cancelam.</p>
+            <h3 class="h6">Matrizes de confusão</h3><p class="small text-secondary">Linhas = classe real; colunas = previsão. Classes: 0 permaneceu, 1 cancelou.</p>
+            <div class="row g-3">{% for nome, resultado in avaliacao.resultados.items() %}<div class="col-12 col-md-6"><h4 class="h6">{{ nome }}</h4><table class="table table-bordered text-center"><thead><tr><th>Real \ Previsto</th><th>0</th><th>1</th></tr></thead><tbody><tr><th>0</th><td>{{ resultado.matriz[0][0] }}</td><td>{{ resultado.matriz[0][1] }}</td></tr><tr><th>1</th><td>{{ resultado.matriz[1][0] }}</td><td>{{ resultado.matriz[1][1] }}</td></tr></tbody></table></div>{% endfor %}</div>
+            <p class="small mb-0">O arquivo enviado atualiza a análise e os gráficos. O classificador permanece treinado na base tratada incluída no projeto (2.850 registros), para manter a demonstração simples e reprodutível.</p>
+        </section>
+        {% endif %}
+        <a class="btn btn-primary btn-submit px-4 py-2 fw-semibold" href="{{ url_for('index') }}"><i class="bi bi-arrow-left me-2"></i>Voltar</a>
+        <footer class="footer d-flex flex-column flex-sm-row justify-content-between gap-3 mt-4 text-secondary"><span>Trabalho de análise de churn de clientes</span></footer>
+    </main>
+</div>
+</body>
+</html>

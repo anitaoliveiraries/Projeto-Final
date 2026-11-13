@@ -102,6 +102,72 @@ h1 {
     box-shadow: 0 8px 26px rgba(34, 54, 43, .035);
 }
 
+.result-card, .result-section {
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: 0 8px 26px rgba(34, 54, 43, .035);
+}
+
+.result-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 20px;
+}
+
+.result-label {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.result-value {
+    color: var(--dark-blue);
+    font-family: "Manrope", sans-serif;
+    font-size: 28px;
+    line-height: 1.2;
+}
+
+.result-section {
+    padding: 20px;
+}
+
+.section-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    margin-bottom: 18px;
+}
+
+.section-heading h2 {
+    margin: 2px 0 5px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.section-heading p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.result-table {
+    vertical-align: middle;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.result-table th {
+    color: #53615a;
+    font-weight: 700;
+}
+
+.result-table td, .result-table th {
+    padding: 10px 12px;
+}
+
 .heading-icon {
     width: 42px;
     height: 42px;
